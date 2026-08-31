@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import Advantages from './components/Advantages'; // Impor komponen baru
 import CarCatalog from './components/CarCatalog';
 import Footer from './components/Footer';
 import CarDetailModal from './components/CarDetailModal';
@@ -15,6 +16,7 @@ export default function App() {
       <div>
         <Navbar />
         <Hero />
+        <Advantages /> {/* Posisikan di sini */}
         <CarCatalog 
           onDetail={(car) => setSelectedCarDetail(car)} 
           onBook={(car) => setSelectedCarBooking(car)} 
