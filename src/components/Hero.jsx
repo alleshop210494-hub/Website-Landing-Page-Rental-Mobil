@@ -2,15 +2,14 @@ import React from 'react';
 
 export default function Hero() {
   return (
-    <div id="home" className="relative bg-blue-900 text-white py-24 px-4 sm:px-6 lg:px-8">
-      <div className="absolute inset-0 overflow-hidden opacity-20">
-        <img 
-          src="https://images.unsplash.com/photo-1485291571150-772bcfc10da5?auto=format&fit=crop&q=80&w=1920" 
-          alt="Hero Background" 
-          className="w-full h-full object-cover"
-        />
-      </div>
-      <div className="relative max-w-4xl mx-auto text-center">
+    <div 
+      id="home" 
+      className="relative bg-blue-900 text-white py-24 px-4 sm:px-6 lg:px-8 overflow-hidden bg-cover bg-center"
+      style={{ 
+        backgroundImage: `linear-gradient(to bottom right, rgba(23, 37, 84, 0.6), rgba(30, 58, 138, 0.5)), url('/images/hero.jpeg')` 
+      }}
+    >
+      <div className="relative max-w-4xl mx-auto text-center z-10">
         <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-6">
           Sewa Mobil Nyaman & Terpercaya untuk Perjalanan Anda
         </h1>
