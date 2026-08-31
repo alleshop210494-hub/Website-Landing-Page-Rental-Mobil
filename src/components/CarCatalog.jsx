@@ -3,36 +3,12 @@ import CarCard from './CarCard';
 import { sql } from '../lib/db';
 
 const fallbackCars = [
-  { 
-    id: 1, 
-    name: 'Toyota Avanza', 
-    category: 'MPV', 
-    price: 350000, 
-    image: '/images/avanza.jpeg', 
-    seats: 7, 
-    transmission: 'Manual' 
-  },
-  { 
-    id: 2, 
-    name: 'Honda Civic', 
-    category: 'Sedan', 
-    price: 650000, 
-    image: '/images/civic.png', 
-    seats: 5, 
-    transmission: 'Automatic' 
-  },
-  { 
-    id: 3, 
-    name: 'Mitsubishi Pajero', 
-    category: 'SUV', 
-    price: 1200000, 
-    image: '/images/pajero.jpg', 
-    seats: 7, 
-    transmission: 'Automatic' 
-  }
+  { id: 1, name: 'Toyota Avanza', category: 'MPV', price: 350000, image: '/images/avanza.jpeg', seats: 7, transmission: 'Manual' },
+  { id: 2, name: 'Honda Civic', category: 'Sedan', price: 650000, image: '/images/civic.png', seats: 5, transmission: 'Automatic' },
+  { id: 3, name: 'Mitsubishi Pajero', category: 'SUV', price: 1200000, image: '/images/pajero.jpg', seats: 7, transmission: 'Automatic' }
 ];
 
-export default function CarCatalog() {
+export default function CarCatalog({ onDetail, onBook }) {
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -47,7 +23,7 @@ export default function CarCatalog() {
 
         await sql`
           CREATE TABLE IF NOT EXISTS cars (
-            id SERIAL PRIMARY KEY,
+            id INT PRIMARY KEY,
             name VARCHAR(255) NOT NULL,
             category VARCHAR(100) NOT NULL,
             price DECIMAL(10, 2) NOT NULL,
@@ -57,18 +33,21 @@ export default function CarCatalog() {
           );
         `;
 
-        const existingCars = await sql`SELECT * FROM cars;`;
+        await sql`
+          INSERT INTO cars (id, name, category, price, image, seats, transmission) VALUES
+          (1, 'Toyota Avanza', 'MPV', 350000, '/images/avanza.jpeg', 7, 'Manual'),
+          (2, 'Honda Civic', 'Sedan', 650000, '/images/civic.png', 5, 'Automatic'),
+          (3, 'Mitsubishi Pajero', 'SUV', 1200000, '/images/pajero.jpg', 7, 'Automatic')
+          ON CONFLICT (id) DO UPDATE SET 
+            name = EXCLUDED.name,
+            category = EXCLUDED.category,
+            price = EXCLUDED.price,
+            image = EXCLUDED.image,
+            seats = EXCLUDED.seats,
+            transmission = EXCLUDED.transmission;
+        `;
 
-        if (existingCars.length === 0) {
-          await sql`
-            INSERT INTO cars (name, category, price, image, seats, transmission) VALUES
-            ('Toyota Avanza', 'MPV', 350000, '/images/avanza.jpeg', 7, 'Manual'),
-            ('Honda Civic', 'Sedan', 650000, '/images/civic.png', 5, 'Automatic'),
-            ('Mitsubishi Pajero', 'SUV', 1200000, '/images/pajero.jpg', 7, 'Automatic');
-          `;
-        }
-
-        const data = await sql`SELECT * FROM cars;`;
+        const data = await sql`SELECT * FROM cars ORDER BY id ASC;`;
         setCars(data);
       } catch (err) {
         console.error('Database connection notice, using fallback data:', err);
@@ -95,7 +74,7 @@ export default function CarCatalog() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {cars.map((car) => (
-            <CarCard key={car.id} car={car} />
+            <CarCard key={car.id} car={car} onDetail={onDetail} onBook={onBook} />
           ))}
         </div>
       )}

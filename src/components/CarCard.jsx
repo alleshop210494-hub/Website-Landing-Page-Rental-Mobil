@@ -1,7 +1,7 @@
 import React from 'react';
-import { Users, Settings } from 'lucide-react';
+import { Users, Settings, Eye } from 'lucide-react';
 
-export default function CarCard({ car }) {
+export default function CarCard({ car, onDetail, onBook }) {
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition flex flex-col justify-between">
       <div>
@@ -28,12 +28,20 @@ export default function CarCard({ car }) {
           <span className="text-xs text-gray-500 block">Harga / Hari</span>
           <span className="text-lg font-bold text-blue-600">Rp {Number(car.price).toLocaleString('id-ID')}</span>
         </div>
-        <button 
-          onClick={() => alert(`Anda memilih ${car.name}`)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition"
-        >
-          Pesan
-        </button>
+        <div className="flex gap-2">
+          <button 
+            onClick={() => onDetail(car)}
+            className="border border-blue-600 text-blue-600 px-3 py-2 rounded-lg text-sm font-medium hover:bg-blue-50 transition flex items-center gap-1"
+          >
+            <Eye size={16} /> Detail
+          </button>
+          <button 
+            onClick={() => onBook(car)}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition"
+          >
+            Pesan
+          </button>
+        </div>
       </div>
     </div>
   );
